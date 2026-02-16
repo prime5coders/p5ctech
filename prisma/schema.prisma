@@ -1,0 +1,78 @@
+// ===========================================
+// P5C Tech - Prisma Database Schema
+// ===========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Admin users for dashboard access
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // bcrypt hashed
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+/// Contact form submissions from the marketing site
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("contacts")
+}
+
+/// Newsletter subscriber list
+model Newsletter {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  subscribedAt DateTime @default(now()) @map("subscribed_at")
+  active       Boolean  @default(true)
+
+  @@map("newsletter_subscribers")
+}
+
+/// Portfolio projects / case studies
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  imageUrl    String?  @map("image_url")
+  tags        String[] // e.g. ["Next.js", "React", "TypeScript"]
+  liveUrl     String?  @map("live_url")
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("projects")
+}
+
+/// Client testimonials
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String // e.g. "CEO at Acme Inc."
+  content   String   @db.Text
+  avatarUrl String?  @map("avatar_url")
+  rating    Int      @default(5)
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
