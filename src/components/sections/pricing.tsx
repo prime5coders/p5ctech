@@ -150,9 +150,6 @@ export function PricingSection() {
                                     <motion.li
                                         key={feature}
                                         custom={fi}
-                                        initial="hidden"
-                                        whileInView="visible"
-                                        viewport={{ once: true }}
                                         variants={featureVariants}
                                         className="flex items-start gap-3 text-sm text-muted-foreground"
                                     >
@@ -170,7 +167,7 @@ export function PricingSection() {
                                         "w-full rounded-full transition-all duration-300",
                                         tier.popular
                                             ? "bg-primary hover:bg-primary/90 hover:shadow-[0_0_20px_oklch(0.78_0.12_80_/_30%)]"
-                                            : "bg-secondary hover:bg-secondary/80"
+                                            : "bg-white/10 text-foreground hover:bg-white/20 hover:shadow-[0_0_15px_oklch(0.78_0.12_80_/_10%)] border border-white/5"
                                     )}
                                 >
                                     <a href="#contact">{tier.cta}</a>
