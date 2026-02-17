@@ -9,7 +9,7 @@
     "lint": "eslint",
     "build:worker": "npx @opennextjs/cloudflare build",
     "preview": "npx @opennextjs/cloudflare build && npx wrangler dev",
-    "deploy": "npx @opennextjs/cloudflare build && npx wrangler deploy"
+    "deploy": "npx @opennextjs/cloudflare build && find .open-next -name \"*.wasm-base64.*\" ! -name \"*postgresql*\" -delete && find .open-next -name \"*.map\" -delete && npx wrangler deploy"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

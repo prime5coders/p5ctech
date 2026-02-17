@@ -4,10 +4,9 @@
 // isolated from marketing layout
 // ===========================================
 
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import {
     LayoutDashboard,
     MessageSquare,
@@ -15,7 +14,7 @@ import {
     UserCog,
     ArrowLeft,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import SidebarLink from "./sidebar-link";
 
 const adminNav = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -24,12 +23,16 @@ const adminNav = [
     { label: "Users", href: "/admin/users", icon: UserCog },
 ];
 
-export default function AdminLayout({
+export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const pathname = usePathname();
+    const session = await auth();
+
+    if (!session) {
+        redirect("/login");
+    }
 
     return (
         <div className="flex min-h-screen">
@@ -57,27 +60,14 @@ export default function AdminLayout({
 
                 {/* Navigation */}
                 <nav className="space-y-1">
-                    {adminNav.map((item) => {
-                        const isActive =
-                            pathname === item.href ||
-                            (item.href !== "/admin" && pathname.startsWith(item.href));
-
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className={cn(
-                                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
-                                    isActive
-                                        ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                                        : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-foreground"
-                                )}
-                            >
-                                <item.icon size={18} />
-                                {item.label}
-                            </Link>
-                        );
-                    })}
+                    {adminNav.map((item) => (
+                        <SidebarLink
+                            key={item.href}
+                            href={item.href}
+                            label={item.label}
+                            icon={item.icon}
+                        />
+                    ))}
                 </nav>
             </aside>
 
