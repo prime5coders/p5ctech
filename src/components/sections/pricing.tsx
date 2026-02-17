@@ -32,7 +32,7 @@ const cardVariants = {
         filter: "blur(0px)",
         transition: {
             duration: 0.8,
-            ease: [0.25, 0.4, 0.25, 1],
+            ease: "easeOut",
         },
     },
 };
@@ -45,7 +45,7 @@ const featureVariants = {
         transition: {
             delay: 0.5 + i * 0.05,
             duration: 0.4,
-            ease: [0.25, 0.4, 0.25, 1],
+            ease: "easeOut",
         },
     }),
 };
@@ -61,7 +61,7 @@ export function PricingSection() {
                     initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center"
                 >
                     <motion.p

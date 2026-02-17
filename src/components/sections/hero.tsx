@@ -21,7 +21,7 @@ const letterVariants = {
         transition: {
             delay: 0.3 + i * 0.03,
             duration: 0.6,
-            ease: [0.25, 0.4, 0.25, 1],
+            ease: "easeOut",
         },
     }),
 };
@@ -82,7 +82,7 @@ export function HeroSection() {
                 <motion.div
                     initial={{ opacity: 0, y: 30, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+                    transition={{ duration: 0.7, ease: "easeOut" }}
                     className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground"
                 >
                     <motion.span
@@ -142,7 +142,7 @@ export function HeroSection() {
                 <motion.p
                     initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.8, delay: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
+                    transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
                     className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
                 >
                     Full-stack web development agency crafting high-performance applications
@@ -194,7 +194,7 @@ export function HeroSection() {
                             transition={{
                                 duration: 0.6,
                                 delay: 1.8 + i * 0.15,
-                                ease: [0.25, 0.4, 0.25, 1],
+                                ease: "easeOut",
                             }}
                             className="space-y-1"
                         >

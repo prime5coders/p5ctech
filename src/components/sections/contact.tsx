@@ -24,7 +24,7 @@ const infoItemVariants = {
         transition: {
             delay: 0.3 + i * 0.15,
             duration: 0.6,
-            ease: [0.25, 0.4, 0.25, 1],
+            ease: "easeOut",
         },
     }),
 };
@@ -37,7 +37,7 @@ const formFieldVariants = {
         transition: {
             delay: 0.3 + i * 0.1,
             duration: 0.5,
-            ease: [0.25, 0.4, 0.25, 1],
+            ease: "easeOut",
         },
     }),
 };
@@ -95,7 +95,7 @@ export function ContactSection() {
                     initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center"
                 >
                     <motion.p
@@ -148,7 +148,7 @@ export function ContactSection() {
                         initial={{ opacity: 0, x: 40, filter: "blur(8px)" }}
                         whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
                         className="lg:col-span-3"
                     >
                         <form

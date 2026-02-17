@@ -53,7 +53,7 @@ export function NewsletterSection() {
                     initial={{ opacity: 0, y: 50, scale: 0.92, filter: "blur(8px)" }}
                     whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
                     className="rounded-2xl border border-border/50 bg-card/50 p-8 text-center md:p-12 transition-all duration-500 hover:border-primary/15 hover:shadow-[0_10px_50px_oklch(0_0_0_/_30%)]"
                 >
                     <motion.p
