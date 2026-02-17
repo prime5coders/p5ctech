@@ -1,6 +1,8 @@
-
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
+
+console.log("[Auth] Initializing NextAuth. AUTH_SECRET present:", !!process.env.AUTH_SECRET)
+
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
@@ -12,8 +14,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     secret: process.env.AUTH_SECRET,
     providers: [
         Google({
-            clientId: process.env.AUTH_GOOGLE_ID,
-            clientSecret: process.env.AUTH_GOOGLE_SECRET,
+            clientId: process.env.AUTH_GOOGLE_ID || "",
+            clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
         }),
         Credentials({
             name: "Start a Project",
