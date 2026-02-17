@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -9,9 +10,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 shadow-sm",
         outline:
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
@@ -24,7 +25,7 @@ const buttonVariants = cva(
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        lg: "h-10 rounded-md px-8 has-[>svg]:px-4 text-base",
         icon: "size-9",
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",
@@ -49,9 +50,11 @@ function Button({
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot.Root : "button"
+  const MotionComp = asChild ? motion(Slot.Root) : motion.button
 
   return (
-    <Comp
+    <MotionComp
+      whileTap={{ scale: 0.95 }}
       data-slot="button"
       data-variant={variant}
       data-size={size}

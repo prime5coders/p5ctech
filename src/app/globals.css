@@ -146,6 +146,12 @@
   ::-webkit-scrollbar-thumb:hover {
     background: oklch(0.78 0.12 80 / 50%);
   }
+
+  /* Selection styling */
+  ::selection {
+    background: oklch(0.78 0.12 80 / 25%);
+    color: oklch(0.95 0.005 80);
+  }
 }
 
 /* ---- Utility classes ---- */
@@ -185,6 +191,21 @@
     background-clip: text;
   }
 
+  /* Animated gradient text — flowing gold */
+  .gradient-text-animated {
+    background: linear-gradient(90deg,
+        oklch(0.85 0.10 75),
+        oklch(0.78 0.12 80),
+        oklch(0.68 0.10 55),
+        oklch(0.78 0.12 80),
+        oklch(0.85 0.10 75));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 4s ease infinite;
+  }
+
   /* Grid background pattern */
   .bg-grid {
     background-image:
@@ -210,9 +231,110 @@
   .section-padding {
     @apply py-24 px-4 md:px-8 lg:px-12;
   }
+
+  /* Shimmer text effect */
+  .shimmer-text {
+    background: linear-gradient(110deg,
+        oklch(0.58 0.010 260) 35%,
+        oklch(0.95 0.005 80) 50%,
+        oklch(0.58 0.010 260) 65%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Hover glow for interactive elements */
+  .hover-glow {
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.4, 0.25, 1);
+  }
+
+  .hover-glow:hover {
+    box-shadow:
+      0 0 25px oklch(0.78 0.12 80 / 20%),
+      0 0 50px oklch(0.78 0.12 80 / 8%);
+    transform: translateY(-2px);
+  }
+
+  /* Link underline animation */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, oklch(0.78 0.12 80), oklch(0.85 0.10 75));
+    transition: width 0.4s cubic-bezier(0.25, 0.4, 0.25, 1);
+  }
+
+  .link-underline:hover::after {
+    width: 100%;
+  }
+
+  /* Card hover lift */
+  .card-hover {
+    transition: all 0.5s cubic-bezier(0.25, 0.4, 0.25, 1);
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px oklch(0 0 0 / 40%), 0 0 20px oklch(0.78 0.12 80 / 8%);
+    border-color: oklch(0.78 0.12 80 / 20%);
+  }
 }
 
-/* ---- Animations ---- */
+/* ---- Button Click Ripple Effect ---- */
+[data-slot="button"] {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.4, 0.25, 1);
+}
+
+[data-slot="button"]:active {
+  transform: scale(0.97);
+}
+
+[data-slot="button"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%),
+      oklch(1 0 0 / 30%) 0%,
+      oklch(1 0 0 / 0%) 70%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+[data-slot="button"]:active::after {
+  opacity: 1;
+  animation: btn-ripple 0.6s ease-out;
+}
+
+/* Primary button enhanced hover */
+[data-variant="default"]:hover {
+  box-shadow: 0 0 25px oklch(0.78 0.12 80 / 25%), 0 4px 15px oklch(0 0 0 / 30%);
+}
+
+/* Outline button hover glow */
+[data-variant="outline"]:hover {
+  border-color: oklch(0.78 0.12 80 / 30%);
+  box-shadow: 0 0 15px oklch(0.78 0.12 80 / 10%);
+}
+
+/* Ghost button subtle lift */
+[data-variant="ghost"]:hover {
+  transform: translateY(-1px);
+}
+
+/* ---- Keyframe Animations ---- */
 @keyframes float {
 
   0%,
@@ -245,4 +367,125 @@
   100% {
     background-position: 200% 0;
   }
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes btn-ripple {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes border-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px oklch(0.78 0.12 80 / 12%), 0 0 40px oklch(0.78 0.12 80 / 4%);
+  }
+
+  50% {
+    box-shadow: 0 0 30px oklch(0.78 0.12 80 / 20%), 0 0 60px oklch(0.78 0.12 80 / 8%);
+  }
+}
+
+/* Animated border shimmer for featured cards */
+.border-shimmer {
+  position: relative;
+}
+
+.border-shimmer::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg,
+      oklch(0.78 0.12 80 / 0%),
+      oklch(0.78 0.12 80 / 30%),
+      oklch(0.85 0.10 75 / 40%),
+      oklch(0.78 0.12 80 / 30%),
+      oklch(0.78 0.12 80 / 0%));
+  background-size: 200% 100%;
+  animation: border-shimmer 3s linear infinite;
+  z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  padding: 1px;
+}
+
+/* Focus ring animation */
+:focus-visible {
+  outline: 2px solid oklch(0.78 0.12 80 / 50%);
+  outline-offset: 2px;
+  transition: outline-offset 0.2s ease;
+}
+
+/* Smooth page transitions */
+main {
+  animation: fade-in-up 0.5s ease-out;
 }
