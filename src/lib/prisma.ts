@@ -18,7 +18,7 @@ const createPrismaClient = () => {
     // In Cloudflare Workers/Edge environments, we use the Neon adapter
     if (connectionString && (process.env.NODE_ENV === "production" || connectionString.includes(".neon.tech"))) {
         const pool = new Pool({ connectionString });
-        const adapter = new PrismaNeon(pool);
+        const adapter = new PrismaNeon(pool as any);
         return new PrismaClient({ adapter: adapter as any });
     }
 
