@@ -24,7 +24,7 @@ const infoItemVariants = {
         transition: {
             delay: 0.3 + i * 0.15,
             duration: 0.6,
-            ease: "easeOut",
+            ease: "easeOut" as const,
         },
     }),
 };
@@ -37,7 +37,7 @@ const formFieldVariants = {
         transition: {
             delay: 0.3 + i * 0.1,
             duration: 0.5,
-            ease: "easeOut",
+            ease: "easeOut" as const,
         },
     }),
 };

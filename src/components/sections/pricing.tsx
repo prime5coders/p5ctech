@@ -32,7 +32,7 @@ const cardVariants = {
         filter: "blur(0px)",
         transition: {
             duration: 0.8,
-            ease: "easeOut",
+            ease: "easeOut" as const,
         },
     },
 };
@@ -45,7 +45,7 @@ const featureVariants = {
         transition: {
             delay: 0.5 + i * 0.05,
             duration: 0.4,
-            ease: "easeOut",
+            ease: "easeOut" as const,
         },
     }),
 };

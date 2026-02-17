@@ -21,7 +21,7 @@ const letterVariants = {
         transition: {
             delay: 0.3 + i * 0.03,
             duration: 0.6,
-            ease: "easeOut",
+            ease: "easeOut" as const,
         },
     }),
 };
@@ -194,7 +194,7 @@ export function HeroSection() {
                             transition={{
                                 duration: 0.6,
                                 delay: 1.8 + i * 0.15,
-                                ease: "easeOut",
+                                ease: "easeOut" as const,
                             }}
                             className="space-y-1"
                         >
