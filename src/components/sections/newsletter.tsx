@@ -1,7 +1,7 @@
 // ===========================================
-// Newsletter Section
-// Email subscription with API integration
-// and inline success/error feedback
+// Newsletter Section — Apple-style reveal
+// Card scales in from small with blur,
+// input field glows on focus
 // ===========================================
 
 "use client";
@@ -50,28 +50,50 @@ export function NewsletterSection() {
         <section className="section-padding relative">
             <div className="mx-auto max-w-3xl">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 50, scale: 0.92, filter: "blur(8px)" }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.6 }}
-                    className="rounded-2xl border border-border/50 bg-card/50 p-8 text-center md:p-12"
+                    transition={{ duration: 0.9, ease: [0.25, 0.4, 0.25, 1] }}
+                    className="rounded-2xl border border-border/50 bg-card/50 p-8 text-center md:p-12 transition-all duration-500 hover:border-primary/15 hover:shadow-[0_10px_50px_oklch(0_0_0_/_30%)]"
                 >
-                    <p className="text-sm font-medium uppercase tracking-widest text-primary">
+                    <motion.p
+                        initial={{ opacity: 0, letterSpacing: "0.3em" }}
+                        whileInView={{ opacity: 1, letterSpacing: "0.2em" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="text-sm font-medium uppercase text-primary"
+                    >
                         Stay Updated
-                    </p>
-                    <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-3xl">
+                    </motion.p>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                        className="mt-3 text-2xl font-bold tracking-tight md:text-3xl"
+                    >
                         Get the latest from{" "}
                         <span className="gradient-text">P5C Tech</span>
-                    </h2>
-                    <p className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground">
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="mx-auto mt-3 max-w-lg text-sm text-muted-foreground"
+                    >
                         Subscribe to our newsletter for insights on web development,
                         design trends, and industry best practices. No spam, unsubscribe
                         anytime.
-                    </p>
+                    </motion.p>
 
                     {/* Subscribe form */}
-                    <form
+                    <motion.form
                         onSubmit={handleSubmit}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
                         className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row"
                     >
                         <Input
@@ -79,39 +101,49 @@ export function NewsletterSection() {
                             type="email"
                             placeholder="you@example.com"
                             required
-                            className="flex-1 rounded-full border-border/50 bg-background/50 px-5"
+                            className="flex-1 rounded-full border-border/50 bg-background/50 px-5 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_20px_oklch(0.78_0.12_80_/_15%)]"
                         />
-                        <Button
-                            type="submit"
-                            disabled={state === "submitting"}
-                            className="group rounded-full bg-primary px-6 hover:bg-primary/90"
-                        >
-                            {state === "submitting" ? (
-                                "Subscribing..."
-                            ) : (
-                                <>
-                                    Subscribe
-                                    <ArrowRight
-                                        size={14}
-                                        className="ml-1 transition-transform group-hover:translate-x-1"
-                                    />
-                                </>
-                            )}
-                        </Button>
-                    </form>
+                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Button
+                                type="submit"
+                                disabled={state === "submitting"}
+                                className="group rounded-full bg-primary px-6 hover:bg-primary/90 transition-all duration-300 hover:shadow-[0_0_20px_oklch(0.78_0.12_80_/_25%)]"
+                            >
+                                {state === "submitting" ? (
+                                    "Subscribing..."
+                                ) : (
+                                    <>
+                                        Subscribe
+                                        <ArrowRight
+                                            size={14}
+                                            className="ml-1 transition-transform duration-300 group-hover:translate-x-1"
+                                        />
+                                    </>
+                                )}
+                            </Button>
+                        </motion.div>
+                    </motion.form>
 
                     {/* Feedback */}
                     {state === "success" && (
-                        <p className="mt-4 flex items-center justify-center gap-2 text-sm text-green-400">
+                        <motion.p
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 flex items-center justify-center gap-2 text-sm text-green-400"
+                        >
                             <CheckCircle size={14} />
                             You&apos;re subscribed! Welcome aboard.
-                        </p>
+                        </motion.p>
                     )}
                     {state === "error" && (
-                        <p className="mt-4 flex items-center justify-center gap-2 text-sm text-destructive">
+                        <motion.p
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 flex items-center justify-center gap-2 text-sm text-destructive"
+                        >
                             <AlertCircle size={14} />
                             {errorMsg}
-                        </p>
+                        </motion.p>
                     )}
                 </motion.div>
             </div>

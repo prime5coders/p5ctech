@@ -1,7 +1,7 @@
 // ===========================================
-// Contact Section
-// Contact form with validation, API submission,
-// and success/error feedback states
+// Contact Section — Apple-style transitions
+// Form slides in from right, contact info from
+// left, with smooth revealed form fields
 // ===========================================
 
 "use client";
@@ -14,6 +14,33 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 type FormState = "idle" | "submitting" | "success" | "error";
+
+const infoItemVariants = {
+    hidden: { opacity: 0, x: -30, filter: "blur(4px)" },
+    visible: (i: number) => ({
+        opacity: 1,
+        x: 0,
+        filter: "blur(0px)",
+        transition: {
+            delay: 0.3 + i * 0.15,
+            duration: 0.6,
+            ease: [0.25, 0.4, 0.25, 1],
+        },
+    }),
+};
+
+const formFieldVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {
+            delay: 0.3 + i * 0.1,
+            duration: 0.5,
+            ease: [0.25, 0.4, 0.25, 1],
+        },
+    }),
+};
 
 export function ContactSection() {
     const [formState, setFormState] = useState<FormState>("idle");
@@ -54,20 +81,32 @@ export function ContactSection() {
         }
     }
 
+    const contactInfo = [
+        { icon: Mail, title: "Email", value: "hello@p5ctech.com" },
+        { icon: MapPin, title: "Location", value: "Remote-first, Global" },
+        { icon: Clock, title: "Response Time", value: "Within 24 hours" },
+    ];
+
     return (
         <section id="contact" className="section-padding relative">
             <div className="mx-auto max-w-7xl">
-                {/* Section header */}
+                {/* Section header — blur reveal */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
                     className="text-center"
                 >
-                    <p className="text-sm font-medium uppercase tracking-widest text-primary">
+                    <motion.p
+                        initial={{ opacity: 0, letterSpacing: "0.3em" }}
+                        whileInView={{ opacity: 1, letterSpacing: "0.2em" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        className="text-sm font-medium uppercase text-primary"
+                    >
                         Get In Touch
-                    </p>
+                    </motion.p>
                     <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
                         Let&apos;s build{" "}
                         <span className="gradient-text">something great</span>
@@ -79,59 +118,50 @@ export function ContactSection() {
                 </motion.div>
 
                 <div className="mt-16 grid gap-12 lg:grid-cols-5">
-                    {/* Contact info */}
+                    {/* Contact info — staggered slide from left */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial="hidden"
+                        whileInView="visible"
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
                         className="space-y-8 lg:col-span-2"
                     >
-                        <div className="flex items-start gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2.5">
-                                <Mail size={20} className="text-primary" />
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-semibold">Email</h4>
-                                <p className="text-sm text-muted-foreground">hello@p5ctech.com</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2.5">
-                                <MapPin size={20} className="text-primary" />
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-semibold">Location</h4>
-                                <p className="text-sm text-muted-foreground">Remote-first, Global</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="rounded-lg bg-primary/10 p-2.5">
-                                <Clock size={20} className="text-primary" />
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-semibold">Response Time</h4>
-                                <p className="text-sm text-muted-foreground">Within 24 hours</p>
-                            </div>
-                        </div>
+                        {contactInfo.map((item, i) => (
+                            <motion.div
+                                key={item.title}
+                                custom={i}
+                                variants={infoItemVariants}
+                                className="group flex items-start gap-4"
+                            >
+                                <div className="rounded-lg bg-primary/10 p-2.5 transition-all duration-500 group-hover:bg-primary/20 group-hover:scale-110 group-hover:rotate-3">
+                                    <item.icon size={20} className="text-primary" />
+                                </div>
+                                <div>
+                                    <h4 className="text-sm font-semibold">{item.title}</h4>
+                                    <p className="text-sm text-muted-foreground">{item.value}</p>
+                                </div>
+                            </motion.div>
+                        ))}
                     </motion.div>
 
-                    {/* Contact form */}
+                    {/* Contact form — slides in from right with blur */}
                     <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, x: 40, filter: "blur(8px)" }}
+                        whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
                         className="lg:col-span-3"
                     >
                         <form
                             onSubmit={handleSubmit}
-                            className="space-y-6 rounded-2xl border border-border/50 bg-card/50 p-8"
+                            className="space-y-6 rounded-2xl border border-border/50 bg-card/50 p-8 transition-all duration-300 hover:border-primary/10"
                         >
-                            <div className="grid gap-6 sm:grid-cols-2">
-                                <div className="space-y-2">
+                            <motion.div
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className="grid gap-6 sm:grid-cols-2"
+                            >
+                                <motion.div custom={0} variants={formFieldVariants} className="space-y-2">
                                     <label htmlFor="name" className="text-sm font-medium">
                                         Name
                                     </label>
@@ -140,10 +170,10 @@ export function ContactSection() {
                                         name="name"
                                         placeholder="John Doe"
                                         required
-                                        className="rounded-lg border-border/50 bg-background/50"
+                                        className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
                                     />
-                                </div>
-                                <div className="space-y-2">
+                                </motion.div>
+                                <motion.div custom={1} variants={formFieldVariants} className="space-y-2">
                                     <label htmlFor="email" className="text-sm font-medium">
                                         Email
                                     </label>
@@ -153,12 +183,19 @@ export function ContactSection() {
                                         type="email"
                                         placeholder="john@example.com"
                                         required
-                                        className="rounded-lg border-border/50 bg-background/50"
+                                        className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
                                     />
-                                </div>
-                            </div>
+                                </motion.div>
+                            </motion.div>
 
-                            <div className="space-y-2">
+                            <motion.div
+                                custom={2}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={formFieldVariants}
+                                className="space-y-2"
+                            >
                                 <label htmlFor="subject" className="text-sm font-medium">
                                     Subject
                                 </label>
@@ -167,11 +204,18 @@ export function ContactSection() {
                                     name="subject"
                                     placeholder="Project Inquiry"
                                     required
-                                    className="rounded-lg border-border/50 bg-background/50"
+                                    className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
                                 />
-                            </div>
+                            </motion.div>
 
-                            <div className="space-y-2">
+                            <motion.div
+                                custom={3}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                variants={formFieldVariants}
+                                className="space-y-2"
+                            >
                                 <label htmlFor="message" className="text-sm font-medium">
                                     Message
                                 </label>
@@ -181,42 +225,52 @@ export function ContactSection() {
                                     placeholder="Tell us about your project..."
                                     rows={5}
                                     required
-                                    className="resize-none rounded-lg border-border/50 bg-background/50"
+                                    className="resize-none rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
                                 />
-                            </div>
+                            </motion.div>
 
                             {/* Status Messages */}
                             {formState === "success" && (
-                                <div className="flex items-center gap-2 rounded-lg bg-green-500/10 p-3 text-sm text-green-400">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex items-center gap-2 rounded-lg bg-green-500/10 p-3 text-sm text-green-400"
+                                >
                                     <CheckCircle size={16} />
                                     Message sent successfully! We&apos;ll be in touch.
-                                </div>
+                                </motion.div>
                             )}
                             {formState === "error" && (
-                                <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
+                                >
                                     <AlertCircle size={16} />
                                     {errorMessage}
-                                </div>
+                                </motion.div>
                             )}
 
-                            {/* Submit button */}
-                            <Button
-                                type="submit"
-                                disabled={formState === "submitting"}
-                                className="w-full rounded-full bg-primary hover:bg-primary/90"
-                            >
-                                {formState === "submitting" ? (
-                                    <span className="flex items-center gap-2">
-                                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                                        Sending...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-2">
-                                        <Send size={16} />
-                                        Send Message
-                                    </span>
-                                )}
-                            </Button>
+                            {/* Submit button with hover glow */}
+                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                <Button
+                                    type="submit"
+                                    disabled={formState === "submitting"}
+                                    className="w-full rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 hover:shadow-[0_0_25px_oklch(0.78_0.12_80_/_25%)]"
+                                >
+                                    {formState === "submitting" ? (
+                                        <span className="flex items-center gap-2">
+                                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
+                                            Sending...
+                                        </span>
+                                    ) : (
+                                        <span className="flex items-center gap-2">
+                                            <Send size={16} />
+                                            Send Message
+                                        </span>
+                                    )}
+                                </Button>
+                            </motion.div>
                         </form>
                     </motion.div>
                 </div>

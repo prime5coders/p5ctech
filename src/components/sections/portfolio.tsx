@@ -1,7 +1,7 @@
 // ===========================================
-// Portfolio Section
-// Case study showcase with tags, hover overlays,
-// and gradient placeholder images
+// Portfolio Section — Apple-style reveals
+// Cards slide up with scale + blur, hover lifts
+// card with 3D depth, image parallax on hover
 // ===========================================
 
 "use client";
@@ -11,6 +11,30 @@ import { ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { projects } from "@/lib/data";
 
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.15,
+            delayChildren: 0.2,
+        },
+    },
+};
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 80, scale: 0.92, filter: "blur(6px)" },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        transition: {
+            duration: 0.8,
+            ease: [0.25, 0.4, 0.25, 1],
+        },
+    },
+};
+
 export function PortfolioSection() {
     return (
         <section id="portfolio" className="section-padding relative">
@@ -18,17 +42,23 @@ export function PortfolioSection() {
             <div className="absolute inset-0 bg-dots opacity-30" />
 
             <div className="relative mx-auto max-w-7xl">
-                {/* Section header */}
+                {/* Section header — blur reveal */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
                     className="text-center"
                 >
-                    <p className="text-sm font-medium uppercase tracking-widest text-primary">
+                    <motion.p
+                        initial={{ opacity: 0, letterSpacing: "0.3em" }}
+                        whileInView={{ opacity: 1, letterSpacing: "0.2em" }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        className="text-sm font-medium uppercase text-primary"
+                    >
                         Our Work
-                    </p>
+                    </motion.p>
                     <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
                         Projects that{" "}
                         <span className="gradient-text">speak for themselves</span>
@@ -39,69 +69,82 @@ export function PortfolioSection() {
                     </p>
                 </motion.div>
 
-                {/* Projects grid */}
-                <div className="mt-16 grid gap-8 md:grid-cols-2">
+                {/* Projects grid — staggered entry */}
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-80px" }}
+                    className="mt-16 grid gap-8 md:grid-cols-2"
+                >
                     {projects.map((project, index) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                        >
-                            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 transition-all duration-300 hover:border-primary/30">
-                                {/* Image placeholder with gradient */}
+                        <motion.div key={project.id} variants={cardVariants}>
+                            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 transition-all duration-500 hover:border-primary/30 hover:-translate-y-2 hover:shadow-[0_20px_60px_oklch(0_0_0_/_40%),_0_0_30px_oklch(0.78_0.12_80_/_10%)]">
+                                {/* Image with parallax zoom */}
                                 <div className="relative h-56 overflow-hidden">
                                     <div
-                                        className="absolute inset-0 transition-transform duration-500 group-hover:scale-110"
+                                        className="absolute inset-0 transition-all duration-700 group-hover:scale-110 group-hover:blur-[1px]"
                                         style={{
                                             background: `linear-gradient(135deg, 
-                        oklch(0.3 0.08 ${200 + index * 40}) 0%, 
-                        oklch(0.2 0.12 ${260 + index * 30}) 50%, 
-                        oklch(0.15 0.06 ${220 + index * 35}) 100%)`,
+                            oklch(0.3 0.08 ${200 + index * 40}) 0%, 
+                            oklch(0.2 0.12 ${260 + index * 30}) 50%, 
+                            oklch(0.15 0.06 ${220 + index * 35}) 100%)`,
                                         }}
                                     />
                                     {/* Project title overlay */}
                                     <div className="absolute inset-0 flex items-center justify-center">
-                                        <span className="text-2xl font-bold text-white/30">
+                                        <motion.span
+                                            className="text-2xl font-bold text-white/20 transition-all duration-500 group-hover:text-white/10 group-hover:scale-110"
+                                        >
                                             {project.title}
-                                        </span>
+                                        </motion.span>
                                     </div>
 
-                                    {/* Hover overlay */}
-                                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                                        <a
+                                    {/* Hover overlay — Apple-style slide up */}
+                                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0">
+                                        <motion.a
                                             href={project.liveUrl}
-                                            className="flex items-center gap-2 rounded-full bg-primary px-6 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-105"
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-lg"
                                         >
                                             View Project
                                             <ExternalLink size={14} />
-                                        </a>
+                                        </motion.a>
                                     </div>
                                 </div>
 
                                 {/* Content */}
                                 <div className="p-6">
-                                    <h3 className="text-xl font-semibold">{project.title}</h3>
+                                    <h3 className="text-xl font-semibold transition-colors duration-300 group-hover:text-primary">
+                                        {project.title}
+                                    </h3>
                                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                                         {project.description}
                                     </p>
                                     <div className="mt-4 flex flex-wrap gap-2">
-                                        {project.tags.map((tag) => (
-                                            <Badge
+                                        {project.tags.map((tag, tagIdx) => (
+                                            <motion.div
                                                 key={tag}
-                                                variant="secondary"
-                                                className="rounded-full border-border/50 bg-secondary/50 text-xs"
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                whileInView={{ opacity: 1, scale: 1 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: 0.05 * tagIdx, duration: 0.3 }}
                                             >
-                                                {tag}
-                                            </Badge>
+                                                <Badge
+                                                    variant="secondary"
+                                                    className="rounded-full border-border/50 bg-secondary/50 text-xs transition-all duration-300 hover:bg-primary/20 hover:text-primary"
+                                                >
+                                                    {tag}
+                                                </Badge>
+                                            </motion.div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
                         </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );
