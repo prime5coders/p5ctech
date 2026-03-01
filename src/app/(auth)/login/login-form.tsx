@@ -5,11 +5,14 @@ import { motion } from "framer-motion";
 import { Lock, Mail, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signInCredentials, signInGoogle } from "@/app/actions/auth";
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl") || "/admin";
+
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -19,7 +22,7 @@ export default function LoginPage() {
         setGoogleLoading(true);
         setError("");
         try {
-            await signIn("google", { callbackUrl: "/admin" });
+            await signInGoogle(callbackUrl);
         } catch (err) {
             setError("Google sign-in failed. Please try again.");
             setGoogleLoading(false);
@@ -32,22 +35,16 @@ export default function LoginPage() {
         setLoading(true);
 
         const formData = new FormData(e.currentTarget);
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
 
         try {
-            const res = await signIn("credentials", {
-                email,
-                password,
-                redirect: false,
-            });
+            const res = await signInCredentials(formData);
 
-            if (res?.error) {
-                throw new Error("Invalid email or password");
+            if (!res.success) {
+                throw new Error(res.error || "Invalid email or password");
             }
 
-            // Redirect to admin dashboard on success
-            router.push("/admin");
+            // Redirect to intended destination or admin dashboard on success
+            router.push(callbackUrl);
             router.refresh();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Login failed");

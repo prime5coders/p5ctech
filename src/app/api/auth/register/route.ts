@@ -4,7 +4,7 @@
 // ===========================================
 
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs"; // Removed for edge compatibility
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
@@ -39,7 +39,8 @@ export async function POST(req: NextRequest) {
         }
 
         // --- Hash password & create user ---
-        const hashedPassword = await bcrypt.hash(password, 12);
+        const bcrypt = await import("bcryptjs");
+        const hashedPassword = await bcrypt.default.hash(password, 12);
 
         const user = await prisma.user.create({
             data: {

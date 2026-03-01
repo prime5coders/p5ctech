@@ -10,7 +10,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { stats } from "@/lib/data";
-import { useRef } from "react";
+import { useRef, Suspense } from "react";
+import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
+
+const HeroGridScene = dynamic(() => import("@/components/3d/hero-grid-scene"), {
+    ssr: false,
+    loading: () => null,
+});
 
 const letterVariants = {
     hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
@@ -19,7 +26,7 @@ const letterVariants = {
         y: 0,
         filter: "blur(0px)",
         transition: {
-            delay: 0.3 + i * 0.03,
+            delay: 3.5 + i * 0.03, // Start fading in after the 3D grid animation forms
             duration: 0.6,
             ease: "easeOut" as const,
         },
@@ -32,6 +39,9 @@ export function HeroSection() {
         target: sectionRef,
         offset: ["start start", "end start"],
     });
+
+    const { status } = useSession();
+    const ctaHref = status === "authenticated" ? "/#contact" : "/login?callbackUrl=/#contact";
 
     // Parallax transforms
     const yOrb1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
@@ -49,29 +59,8 @@ export function HeroSection() {
             ref={sectionRef}
             className="relative min-h-screen flex items-center justify-center overflow-hidden"
         >
-            {/* Background effects */}
-            <div className="absolute inset-0 bg-grid opacity-40" />
-            <div className="absolute inset-0 bg-hero-gradient" />
-
-            {/* Parallax floating orbs */}
-            <motion.div
-                className="absolute top-1/4 left-1/4 h-72 w-72 rounded-full bg-primary/8 blur-3xl"
-                style={{ y: yOrb1 }}
-                animate={{ x: [0, 30, 0], scale: [1, 1.1, 1] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-                className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-chart-4/8 blur-3xl"
-                style={{ y: yOrb2 }}
-                animate={{ x: [0, -20, 0], scale: [1, 1.15, 1] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            />
-            {/* Third decorative orb */}
-            <motion.div
-                className="absolute top-1/2 right-1/3 h-48 w-48 rounded-full bg-primary/5 blur-3xl"
-                animate={{ y: [0, 40, 0], x: [0, -30, 0] }}
-                transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            />
+            {/* Background cinematic grid scene */}
+            <HeroGridScene />
 
             {/* Content with parallax */}
             <motion.div
@@ -82,7 +71,7 @@ export function HeroSection() {
                 <motion.div
                     initial={{ opacity: 0, y: 30, scale: 0.9 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.7, ease: "easeOut" }}
+                    transition={{ duration: 0.7, delay: 3.2, ease: "easeOut" }}
                     className="mb-8 inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-sm text-muted-foreground"
                 >
                     <motion.span
@@ -142,7 +131,7 @@ export function HeroSection() {
                 <motion.p
                     initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
+                    transition={{ duration: 0.8, delay: 4.5, ease: "easeOut" }}
                     className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl"
                 >
                     Full-stack web development agency crafting high-performance applications
@@ -153,7 +142,7 @@ export function HeroSection() {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, delay: 1.4, type: "spring", stiffness: 100 }}
+                    transition={{ duration: 0.7, delay: 4.7, type: "spring", stiffness: 100 }}
                     className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
                 >
                     <Button
@@ -161,7 +150,7 @@ export function HeroSection() {
                         size="lg"
                         className="group rounded-full bg-primary px-8 text-base hover:bg-primary/90 glow transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_oklch(0.78_0.12_80_/_25%)]"
                     >
-                        <a href="/login">
+                        <a href={ctaHref}>
                             Start a Project
                             <ArrowRight
                                 size={16}
@@ -183,7 +172,7 @@ export function HeroSection() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 1.6 }}
+                    transition={{ duration: 0.5, delay: 4.9 }}
                     className="mt-20 grid grid-cols-2 gap-8 sm:grid-cols-4"
                 >
                     {stats.map((stat, i) => (
@@ -193,7 +182,7 @@ export function HeroSection() {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             transition={{
                                 duration: 0.6,
-                                delay: 1.8 + i * 0.15,
+                                delay: 5.1 + i * 0.15,
                                 ease: "easeOut" as const,
                             }}
                             className="space-y-1"
@@ -211,7 +200,7 @@ export function HeroSection() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2.5, duration: 1 }}
+                transition={{ delay: 5.8, duration: 1 }}
                 className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
             >
                 <motion.div

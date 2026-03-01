@@ -12,6 +12,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { useSession, signOut } from "next-auth/react";
 
 const navItemVariants = {
     hidden: { opacity: 0, y: -10 },
@@ -42,6 +43,9 @@ const mobileItemVariants = {
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { status } = useSession();
+
+    const ctaHref = status === "authenticated" ? "/#contact" : "/login?callbackUrl=/#contact";
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -104,18 +108,29 @@ export function Navbar() {
                     transition={{ duration: 0.5, delay: 0.4 }}
                     className="hidden md:block"
                 >
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                    >
-                        <Button
-                            asChild
-                            className="rounded-full bg-primary px-6 hover:bg-primary/90 glow transition-all duration-300 hover:shadow-[0_0_30px_oklch(0.78_0.12_80_/_30%)]"
+                    <div className="flex items-center gap-4">
+                        {status === "authenticated" && (
+                            <Button
+                                variant="ghost"
+                                className="rounded-full text-muted-foreground hover:text-foreground"
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                            >
+                                Logout
+                            </Button>
+                        )}
+                        <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
                         >
-                            <a href="/login">Start a Project</a>
-                        </Button>
-                    </motion.div>
+                            <Button
+                                asChild
+                                className="rounded-full bg-primary px-6 hover:bg-primary/90 glow transition-all duration-300 hover:shadow-[0_0_30px_oklch(0.78_0.12_80_/_30%)]"
+                            >
+                                <a href={ctaHref}>Start a Project</a>
+                            </Button>
+                        </motion.div>
+                    </div>
                 </motion.div>
 
                 {/* Mobile menu toggle — animated icon swap */}
@@ -182,15 +197,28 @@ export function Navbar() {
                             <motion.div
                                 custom={navLinks.length}
                                 variants={mobileItemVariants}
+                                className="flex flex-col gap-2"
                             >
                                 <Button
                                     asChild
                                     className="mt-2 w-full rounded-full bg-primary hover:bg-primary/90 transition-all duration-300"
                                 >
-                                    <a href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                                    <a href={ctaHref} onClick={() => setIsMobileMenuOpen(false)}>
                                         Start a Project
                                     </a>
                                 </Button>
+                                {status === "authenticated" && (
+                                    <Button
+                                        variant="outline"
+                                        className="w-full rounded-full border-border/50 transition-all duration-300"
+                                        onClick={() => {
+                                            setIsMobileMenuOpen(false);
+                                            signOut({ callbackUrl: "/" });
+                                        }}
+                                    >
+                                        Logout
+                                    </Button>
+                                )}
                             </motion.div>
                         </motion.div>
                     </motion.div>

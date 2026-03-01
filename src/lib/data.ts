@@ -203,7 +203,7 @@ export interface PricingTier {
 export const pricingTiers: PricingTier[] = [
     {
         name: "Starter",
-        price: "$2,499",
+        price: "₹3,000",
         period: "per project",
         description: "Perfect for small businesses and MVPs.",
         features: [
@@ -219,7 +219,7 @@ export const pricingTiers: PricingTier[] = [
     },
     {
         name: "Professional",
-        price: "$7,999",
+        price: "₹7,000",
         period: "per project",
         description: "For growing businesses that need scale.",
         features: [
@@ -259,7 +259,6 @@ export const pricingTiers: PricingTier[] = [
 export const navLinks = [
     { label: "Services", href: "#services" },
     { label: "Portfolio", href: "#portfolio" },
-    { label: "Testimonials", href: "#testimonials" },
     { label: "Pricing", href: "#pricing" },
     { label: "Contact", href: "#contact" },
 ] as const;

@@ -1,8 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Optimization for Cloudflare Workers
-  serverExternalPackages: [],
+  devIndicators: false,
 };
 
 export default nextConfig;

@@ -3,19 +3,34 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+    LayoutDashboard,
+    MessageSquare,
+    Users,
+    UserCog,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+
+const iconMap: Record<string, LucideIcon> = {
+    LayoutDashboard,
+    MessageSquare,
+    Users,
+    UserCog,
+};
 
 interface SidebarLinkProps {
     href: string;
     label: string;
-    icon: LucideIcon;
+    iconName: string;
 }
 
-export default function SidebarLink({ href, label, icon: Icon }: SidebarLinkProps) {
+export default function SidebarLink({ href, label, iconName }: SidebarLinkProps) {
     const pathname = usePathname();
     const isActive =
         pathname === href ||
         (href !== "/admin" && pathname.startsWith(href));
+
+    const Icon = iconMap[iconName] || LayoutDashboard;
 
     return (
         <Link

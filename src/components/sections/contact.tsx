@@ -6,12 +6,10 @@
 
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, CheckCircle, AlertCircle, Mail, MapPin, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Mail, MapPin, Clock } from "lucide-react";
+import { ProjectConfigurator } from "@/components/project-configurator";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -43,47 +41,10 @@ const formFieldVariants = {
 };
 
 export function ContactSection() {
-    const [formState, setFormState] = useState<FormState>("idle");
-    const [errorMessage, setErrorMessage] = useState("");
-
-    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-        setFormState("submitting");
-        setErrorMessage("");
-
-        const formData = new FormData(e.currentTarget);
-        const data = {
-            name: formData.get("name") as string,
-            email: formData.get("email") as string,
-            subject: formData.get("subject") as string,
-            message: formData.get("message") as string,
-        };
-
-        try {
-            const res = await fetch("/api/contact", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
-
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message || "Something went wrong");
-            }
-
-            setFormState("success");
-            (e.target as HTMLFormElement).reset();
-        } catch (err) {
-            setErrorMessage(
-                err instanceof Error ? err.message : "Failed to send message"
-            );
-            setFormState("error");
-        }
-    }
 
     const contactInfo = [
-        { icon: Mail, title: "Email", value: "hello@p5ctech.com" },
-        { icon: MapPin, title: "Location", value: "Remote-first, Global" },
+        { icon: Mail, title: "Email", value: "prime5coders@gmail.com" },
+        { icon: MapPin, title: "Location", value: "Madurai" },
         { icon: Clock, title: "Response Time", value: "Within 24 hours" },
     ];
 
@@ -105,15 +66,15 @@ export function ContactSection() {
                         transition={{ duration: 0.8, delay: 0.1 }}
                         className="text-sm font-medium uppercase text-primary"
                     >
-                        Get In Touch
+                        Start Building
                     </motion.p>
                     <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                        Let&apos;s build{" "}
-                        <span className="gradient-text">something great</span>
+                        Configure Your{" "}
+                        <span className="gradient-text">Project</span>
                     </h2>
                     <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                        Ready to start your next project? Drop us a message and we&apos;ll
-                        get back to you within 24 hours.
+                        Use our interactive configurator to specify your requirements,
+                        get live estimates, and submit your project brief directly to our team.
                     </p>
                 </motion.div>
 
@@ -151,127 +112,7 @@ export function ContactSection() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="lg:col-span-3"
                     >
-                        <form
-                            onSubmit={handleSubmit}
-                            className="space-y-6 rounded-2xl border border-border/50 bg-card/50 p-8 transition-all duration-300 hover:border-primary/10"
-                        >
-                            <motion.div
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                className="grid gap-6 sm:grid-cols-2"
-                            >
-                                <motion.div custom={0} variants={formFieldVariants} className="space-y-2">
-                                    <label htmlFor="name" className="text-sm font-medium">
-                                        Name
-                                    </label>
-                                    <Input
-                                        id="name"
-                                        name="name"
-                                        placeholder="John Doe"
-                                        required
-                                        className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
-                                    />
-                                </motion.div>
-                                <motion.div custom={1} variants={formFieldVariants} className="space-y-2">
-                                    <label htmlFor="email" className="text-sm font-medium">
-                                        Email
-                                    </label>
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        placeholder="john@example.com"
-                                        required
-                                        className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
-                                    />
-                                </motion.div>
-                            </motion.div>
-
-                            <motion.div
-                                custom={2}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                variants={formFieldVariants}
-                                className="space-y-2"
-                            >
-                                <label htmlFor="subject" className="text-sm font-medium">
-                                    Subject
-                                </label>
-                                <Input
-                                    id="subject"
-                                    name="subject"
-                                    placeholder="Project Inquiry"
-                                    required
-                                    className="rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
-                                />
-                            </motion.div>
-
-                            <motion.div
-                                custom={3}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                variants={formFieldVariants}
-                                className="space-y-2"
-                            >
-                                <label htmlFor="message" className="text-sm font-medium">
-                                    Message
-                                </label>
-                                <Textarea
-                                    id="message"
-                                    name="message"
-                                    placeholder="Tell us about your project..."
-                                    rows={5}
-                                    required
-                                    className="resize-none rounded-lg border-border/50 bg-background/50 transition-all duration-300 focus:border-primary/50 focus:shadow-[0_0_15px_oklch(0.78_0.12_80_/_12%)]"
-                                />
-                            </motion.div>
-
-                            {/* Status Messages */}
-                            {formState === "success" && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="flex items-center gap-2 rounded-lg bg-green-500/10 p-3 text-sm text-green-400"
-                                >
-                                    <CheckCircle size={16} />
-                                    Message sent successfully! We&apos;ll be in touch.
-                                </motion.div>
-                            )}
-                            {formState === "error" && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive"
-                                >
-                                    <AlertCircle size={16} />
-                                    {errorMessage}
-                                </motion.div>
-                            )}
-
-                            {/* Submit button with hover glow */}
-                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                <Button
-                                    type="submit"
-                                    disabled={formState === "submitting"}
-                                    className="w-full rounded-full bg-primary hover:bg-primary/90 transition-all duration-300 hover:shadow-[0_0_25px_oklch(0.78_0.12_80_/_25%)]"
-                                >
-                                    {formState === "submitting" ? (
-                                        <span className="flex items-center gap-2">
-                                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
-                                            Sending...
-                                        </span>
-                                    ) : (
-                                        <span className="flex items-center gap-2">
-                                            <Send size={16} />
-                                            Send Message
-                                        </span>
-                                    )}
-                                </Button>
-                            </motion.div>
-                        </form>
+                        <ProjectConfigurator />
                     </motion.div>
                 </div>
             </div>

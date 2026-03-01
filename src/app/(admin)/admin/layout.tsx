@@ -5,22 +5,16 @@
 // ===========================================
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import {
-    LayoutDashboard,
-    MessageSquare,
-    Users,
-    UserCog,
-    ArrowLeft,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import SidebarLink from "./sidebar-link";
+import LogoutButton from "./logout-button";
 
 const adminNav = [
-    { label: "Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Contacts", href: "/admin/contacts", icon: MessageSquare },
-    { label: "Subscribers", href: "/admin/subscribers", icon: Users },
-    { label: "Users", href: "/admin/users", icon: UserCog },
+    { label: "Overview", href: "/admin", iconName: "LayoutDashboard" },
+    { label: "Contacts", href: "/admin/contacts", iconName: "MessageSquare" },
+    { label: "Subscribers", href: "/admin/subscribers", iconName: "Users" },
+    { label: "Users", href: "/admin/users", iconName: "UserCog" },
 ];
 
 export default async function AdminLayout({
@@ -30,8 +24,10 @@ export default async function AdminLayout({
 }) {
     const session = await auth();
 
+    // Middleware handles auth redirection, but as a fallback/type safety
+    // if accessed improperly, render nothing while middleware redirects
     if (!session) {
-        redirect("/login");
+        return null;
     }
 
     return (
@@ -65,10 +61,20 @@ export default async function AdminLayout({
                             key={item.href}
                             href={item.href}
                             label={item.label}
-                            icon={item.icon}
+                            iconName={item.iconName}
                         />
                     ))}
                 </nav>
+
+                {/* Spacer + Logout */}
+                <div className="absolute bottom-6 left-6 right-6">
+                    <div className="border-t border-border/50 pt-4">
+                        <p className="mb-3 truncate px-3 text-xs text-muted-foreground">
+                            {session.user?.email}
+                        </p>
+                        <LogoutButton />
+                    </div>
+                </div>
             </aside>
 
             {/* Main content area */}

@@ -1,12 +1,13 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import LoginPage from "./login-form";
 
 export default async function LoginPageWrapper() {
     const session = await auth();
 
+    // Middleware handles auth redirection, but as a fallback/type safety
+    // if accessed improperly, render nothing while middleware redirects
     if (session) {
-        redirect("/admin");
+        return null;
     }
 
     return <LoginPage />;

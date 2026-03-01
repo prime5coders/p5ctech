@@ -38,32 +38,7 @@ export function TestimonialsSection() {
     return (
         <section id="testimonials" className="section-padding relative">
             <div className="mx-auto max-w-7xl">
-                {/* Section header — blur reveal */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="text-center"
-                >
-                    <motion.p
-                        initial={{ opacity: 0, letterSpacing: "0.3em" }}
-                        whileInView={{ opacity: 1, letterSpacing: "0.2em" }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-sm font-medium uppercase text-primary"
-                    >
-                        Testimonials
-                    </motion.p>
-                    <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                        Trusted by{" "}
-                        <span className="gradient-text">innovative teams</span>
-                    </h2>
-                    <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                        Don&apos;t just take our word for it. Here&apos;s what our clients say
-                        about working with us.
-                    </p>
-                </motion.div>
+                {/* Section header intentionally removed as requested by user */}
 
                 {/* Testimonial cards — staggered */}
                 <motion.div
